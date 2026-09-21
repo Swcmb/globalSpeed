@@ -494,6 +494,8 @@
 			"!incognitoTooltip": "Tooltip explaining the incognito access setting and that clicking it opens the browser extension page",
 			"pinByDefault": "Pin new tabs",
 			"!pinByDefault": "Setting label on the Options page for pinning new tabs automatically",
+			"showPromos": "Show promos",
+			"!showPromos": "Setting label on the Options page for showing occasional suggestions for other projects",
 			"initialContext": "Initial context",
 			"!initialContext": "Label for selecting the initial context (speed/filter settings) of newly pinned tabs",
 			"initialContextTooltip": "The starting context for newly pinned tabs",

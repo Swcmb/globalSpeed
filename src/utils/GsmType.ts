@@ -493,6 +493,8 @@ export type Gsm = {
 			incognitoTooltip: string
 			/** Pin new tabs */
 			pinByDefault: string
+			/** Show occasional suggestions */
+			showPromos: string
 			/** Initial context */
 			initialContext: string
 			/** The starting context for newly pinned tabs */
