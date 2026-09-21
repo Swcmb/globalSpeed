@@ -5,7 +5,7 @@ import { HAS_PIP_API } from "@/utils/supports"
 import { CinemaInit, MediaProbe, StateOption } from "../../../types"
 import { clamp, formatDuration, round } from "../../../utils/helper"
 import { Cinema } from "./Cinema"
-import { IS_AMAZON, IS_BILIBILI, IS_NATIVE, IS_NETFLIX, IS_SMART, IS_SPECIAL_SEEK, IS_YOUTUBE } from "./isWebsite"
+import { IS_AMAZON, IS_BILIBILI, IS_DOUYIN, IS_NATIVE, IS_NETFLIX, IS_SMART, IS_SPECIAL_SEEK, IS_VKBROTHER, IS_YOUTUBE } from "./isWebsite"
 
 export function getMediaProbe(media: HTMLMediaElement, includeFormatted?: boolean): MediaProbe {
 	if (!media) return

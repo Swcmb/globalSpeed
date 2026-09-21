@@ -1,6 +1,8 @@
 import { gvar } from "@/globalVar"
 import { between } from "@/utils/helper"
 import { SubscribeView } from "@/utils/state"
+import { aggressiveRateLocker, BPlayerAdapter } from "./utils/aggressiveRateLock"
+import { IS_DOUYIN, IS_VKBROTHER } from "./utils/isWebsite"
 
 export class SpeedSync {
 	intervalId: number
@@ -16,6 +18,13 @@ export class SpeedSync {
 		window.addEventListener("pointercancel", this.handlePointerCancel, { capture: true, passive: true })
 		document.addEventListener("pointerleave", this.clearPointerDown, { capture: true, passive: true })
 		window.addEventListener("keyup", this.handleKeyUp, { capture: true })
+
+		// 初始化站点特定适配器
+		if (IS_DOUYIN || IS_VKBROTHER) {
+			if (IS_VKBROTHER) {
+				BPlayerAdapter.init()
+			}
+		}
 	}
 	release = () => {
 		clearInterval(this.intervalId)
@@ -25,14 +34,38 @@ export class SpeedSync {
 		window.removeEventListener("pointercancel", this.handlePointerCancel, true)
 		document.removeEventListener("pointerleave", this.clearPointerDown, true)
 		window.removeEventListener("keyup", this.handleKeyUp, true)
+
+		// 清理站点特定适配器
+		aggressiveRateLocker.stop()
+		if (IS_VKBROTHER) {
+			BPlayerAdapter.release()
+		}
 	}
 	update = () => {
 		if (this.latest) {
 			this.intervalId = this.intervalId ?? setInterval(this.realize, 1000)
 			gvar.os.mediaTower.forceSpeedCallbacks.add(this.realize)
 			this.realize()
+
+			// 启动站点特定主动锁定
+			if (IS_DOUYIN || IS_VKBROTHER) {
+				const speed = this.latest.speed
+				if (this.holdToSpeed && this.pointerDownActive()) {
+					aggressiveRateLocker.start(speed * this.holdToSpeed)
+				} else if (this.holdToSpeedForKeyboard && this.keyDownActive()) {
+					aggressiveRateLocker.start(speed * this.holdToSpeedForKeyboard)
+				} else {
+					aggressiveRateLocker.start(speed)
+				}
+
+				// 更新 BPlayer 适配器的速度
+				if (IS_VKBROTHER) {
+					BPlayerAdapter.updateSpeed(this.latest.speed)
+				}
+			}
 		} else {
 			this.intervalId = (clearInterval(this.intervalId), null)
+			aggressiveRateLocker.stop()
 		}
 	}
 	handlePointerDown = (e: PointerEvent) => {

@@ -5,6 +5,8 @@ export let IS_YOUTUBE = false
 export let IS_VIMEO = false
 export let IS_REDDIT = false
 export let IS_FACEBOOK = false
+export let IS_DOUYIN = false
+export let IS_VKBROTHER = false
 
 if (location.hostname === "www.netflix.com") {
 	IS_NETFLIX = true
@@ -20,8 +22,12 @@ if (location.hostname === "www.netflix.com") {
 	IS_REDDIT = true
 } else if (location.hostname === "facebook.com" || location.hostname.endsWith(".facebook.com")) {
 	IS_FACEBOOK = true
+} else if (location.hostname.includes("douyin.com")) {
+	IS_DOUYIN = true
+} else if (location.hostname.includes("vkbrother.com") || location.hostname.includes("baijiayun.com")) {
+	IS_VKBROTHER = true
 }
 
 export const IS_SPECIAL_SEEK = IS_NETFLIX || IS_AMAZON
-export const IS_NATIVE = !(IS_NETFLIX || IS_FACEBOOK)
+export const IS_NATIVE = !(IS_NETFLIX || IS_FACEBOOK || IS_DOUYIN || IS_VKBROTHER)
 export const IS_SMART = !(IS_VIMEO || IS_REDDIT)
